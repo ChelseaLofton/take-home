@@ -1,9 +1,7 @@
 from flask_sqlalchemy import SQLAlchemy
 from datetime import datetime
 
-
 db = SQLAlchemy()
-
 
 class User(db.Model):
     __tablename__ = 'users'
@@ -15,7 +13,6 @@ class User(db.Model):
     def __repr__(self):
         return '<User %r>' % self.username
 
-
 class Reservation(db.Model):
     __tablename__ = 'reservations'
     id = db.Column(db.Integer, primary_key=True)
@@ -24,24 +21,10 @@ class Reservation(db.Model):
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
 
     def __repr__(self):
-        return f'<Reservation {self.start_time} - {self.end_time}'
+        return f'<Reservation {self.start_time} - {self.end_time}>'
 
 
-
-def create_seed_data():
-    user1 = User(username='user1')
-    user2 = User(username='user2')
-
-    db.session.add(user1)
-    db.session.add(user2)
-    db.session.commit()
-
-    print("Seed data created.")
-
-
-
-
-def connected_to_db(flask_app, db_uri="postgresql:///project_data", echo=True):
+def connect_to_db(flask_app, db_uri="postgresql:///project_data", echo=True):
     flask_app.config['SQLALCHEMY_DATABASE_URI'] = db_uri
     flask_app.config['SQLALCHEMY_ECHO'] = echo
     flask_app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
@@ -49,12 +32,14 @@ def connected_to_db(flask_app, db_uri="postgresql:///project_data", echo=True):
     db.app = flask_app
     db.init_app(flask_app)
 
+    with flask_app.app_context():
+        db.create_all()
+
     print('Connected to the db!')
+
 
 
 if __name__ == '__main__':
     from server import app
-    connected_to_db(app)
-    create_seed_data()
     app.run(host="0.0.0.0", port=4000, debug=True)
 

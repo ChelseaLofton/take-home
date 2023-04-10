@@ -34,4 +34,3 @@ function Login() {
     );
 }
 
-ReactDOM.render(<Login />, document.getElementById('root'));
