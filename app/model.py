@@ -28,6 +28,18 @@ class Reservation(db.Model):
 
 
 
+def create_seed_data():
+    user1 = User(username='user1')
+    user2 = User(username='user2')
+
+    db.session.add(user1)
+    db.session.add(user2)
+    db.session.commit()
+
+    print("Seed data created.")
+
+
+
 
 def connected_to_db(flask_app, db_uri="postgresql:///project_data", echo=True):
     flask_app.config['SQLALCHEMY_DATABASE_URI'] = db_uri
@@ -43,3 +55,6 @@ def connected_to_db(flask_app, db_uri="postgresql:///project_data", echo=True):
 if __name__ == '__main__':
     from server import app
     connected_to_db(app)
+    create_seed_data()
+    app.run(host="0.0.0.0", port=4000, debug=True)
+

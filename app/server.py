@@ -4,26 +4,29 @@ from flask_sqlalchemy import SQLAlchemy
 from model import db, User, Reservation, connected_to_db
 import os
 
-app = Flask(__name__)
+app = Flask(__name__, template_folder='/Users/chelsealofton/src/take-home/templates')
+
+app.static_folder = '/Users/chelsealofton/src/take-home/static'
 app.secret_key = os.environ.get('SECRET_KEY')
 app.jinja_env.undefined = StrictUndefined
 
+@app.route('/login_page')
+def login_page():
+    return render_template('index.html')
 
-@app.route('/login', methods=['POST'])
+
+@app.route('/api/login', methods=['POST'])
 def login():
-    # Get the submitted username from the request
     username = request.form.get('username')
-
-    # Check if the user exists in the database
     user = User.query.filter_by(username=username).first()
 
-    # If the user exists, store the user's id in the session and return a success message
     if user:
         session['user_id'] = user.id
-        return jsonify({'status': 'success', 'message': 'Logged in successfully'})
+        return jsonify(status='success', message='Logged in successfully.')
     else:
-        # If the user doesn't exist, return an error message
-        return jsonify({'status': 'error', 'message': 'User not found'}), 404
+        return jsonify(status='error', message='User not found.')
+
+
 
 
 
