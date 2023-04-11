@@ -10,6 +10,8 @@ app.static_folder = '/Users/chelsealofton/src/take-home/static'
 app.secret_key = os.environ.get('SECRET_KEY')
 app.jinja_env.undefined = StrictUndefined
 
+
+
 @app.route('/login_page')
 def login_page():
     return render_template('login.html')
