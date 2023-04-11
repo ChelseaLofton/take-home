@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, redirect, session, url_for, jsonify
+from flask import Flask, render_template, request, redirect, session, url_for, jsonify, flash
 from jinja2 import StrictUndefined
 from flask_sqlalchemy import SQLAlchemy
 from model import db, User, Reservation, connect_to_db
@@ -10,12 +10,9 @@ app.static_folder = '/Users/chelsealofton/src/take-home/static'
 app.secret_key = os.environ.get('SECRET_KEY')
 app.jinja_env.undefined = StrictUndefined
 
-
-
 @app.route('/login_page')
 def login_page():
     return render_template('login.html')
-
 
 @app.route('/api/login', methods=['POST'])
 def login():
@@ -24,10 +21,15 @@ def login():
 
     if user:
         session['user_id'] = user.id
-        return jsonify(status='success', message='Logged in successfully.')
+        flash('Logged in successfully.', 'success')
+        return redirect(url_for('reservations'))
     else:
-        return jsonify(status='error', message='User not found.')
+        flash("Sorry, we don't know you.", 'error')
+        return redirect(url_for('login_page'))
 
+@app.route('/reservations')
+def reservations():
+    return render_template('reservations.html')
 
 if __name__ == "__main__":
     connect_to_db(app)

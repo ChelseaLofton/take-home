@@ -23,14 +23,15 @@ function Login() {
     return (
         <div>
             <h1>Login</h1>
-            <form onSubmit={handleSubmit}>
+            <form action="/api/login" method="POST">
                 <label>
                     Username:
-                    <input type="text" value={username} onChange={(e) => setUsername(e.target.value)} />
+                    <input type="text" name="username" value={username} onChange={(e) => setUsername(e.target.value)} />
                 </label>
                 <button type="submit">Log in</button>
             </form>
         </div>
     );
 }
+
 
