@@ -12,7 +12,7 @@ app.jinja_env.undefined = StrictUndefined
 
 @app.route('/login_page')
 def login_page():
-    return render_template('index.html')
+    return render_template('login.html')
 
 
 @app.route('/api/login', methods=['POST'])
