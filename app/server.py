@@ -27,7 +27,13 @@ def login():
 
 @app.route('/reservations')
 def reservations():
-    return render_template('reservations.html')
+    user_id = session.get('user_id')
+    if user_id:
+        user_reservations = Reservation.query.filter_by(user_id=user_id).all()
+        return render_template('reservations.html', reservations=user_reservations)
+    else:
+        return redirect(url_for('login_page'))
+
 
 if __name__ == "__main__":
     connect_to_db(app)
