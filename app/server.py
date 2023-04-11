@@ -21,10 +21,8 @@ def login():
 
     if user:
         session['user_id'] = user.id
-        flash('Logged in successfully.', 'success')
         return redirect(url_for('reservations'))
     else:
-        flash("Sorry, we don't know you.", 'error')
         return redirect(url_for('login_page'))
 
 @app.route('/reservations')
