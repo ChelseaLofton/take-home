@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <div id="login">
+    </div>
+
+    <!-- React CDN -->
+    <script crossorigin src="https://unpkg.com/react@17/umd/react.production.min.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@17/umd/react-dom.production.min.js"></script>
+
+    <!-- Babel CDN (for JSX) -->
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <!-- Include the login.jsx and other components -->
+    <script src="/static/jsx/login.jsx" type="text/jsx"></script>
+{% endblock %}

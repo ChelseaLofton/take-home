@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <h1>Your Reservations</h1>
+    {% if reservations %}
+        <ul>
+        {% for reservation in reservations %}
+            <li>{{ reservation.start_time.strftime('%Y-%m-%d %H:%M') }} - {{ reservation.end_time.strftime('%Y-%m-%d %H:%M') }}</li>
+        {% endfor %}
+        </ul>
+    {% else %}
+        <p>You have no reservations.</p>
+    {% endif %}
+    <div id="root">
+    </div>
+
+    <!-- React CDN -->
+    <script crossorigin src="https://unpkg.com/react@17/umd/react.production.min.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@17/umd/react-dom.production.min.js"></script>
+    <!-- Babel CDN (for JSX) -->
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <!-- Include the login.jsx file -->
+    <script src="/static/jsx/reservations.jsx" type="text/jsx"></script>
+    <script src="/static/jsx/app.jsx" type="text/jsx"></script>
+
+
+
+{% endblock %}
