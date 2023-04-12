@@ -41,9 +41,10 @@ function SearchReservations() {
         const data = await response.json();
 
         const reservations = data.reservations;
+        const userId = data.user_id;
 
         // Check if the user already has a reservation on the selected date
-        const userReservation = reservations.find((reservation) => reservation.user_id === YOUR_USER_ID);
+        const userReservation = reservations.find((reservation) => reservation.user_id === userId);
         if (userReservation) {
             alert(`You already have a reservation on ${date} at ${userReservation.start_time}.`);
             setHasReservation(true);
