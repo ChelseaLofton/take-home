@@ -10,12 +10,15 @@ function Login() {
         });
         const data = await response.json();
 
-        if (data.status === 'success') {
-            // Redirect to the next page or update the application state
+        if (response.ok) {
             console.log(data.message);
         } else {
-            // Show an error message to the user
             console.error(data.message);
+            if (data.status === 'error' && data.message === 'User not found') {
+                alert('Sorry, your username is not in our database. Please try again or contact support.');
+            } else {
+                alert('An error occurred. Please try again later.');
+            }
         }
     };
 
@@ -23,7 +26,7 @@ function Login() {
     return (
         <div>
             <h1>Login</h1>
-            <form action="/api/login" method="POST">
+            <form onSubmit={handleSubmit}>
                 <label>
                     Username:
                     <input type="text" name="username" value={username} onChange={(e) => setUsername(e.target.value)} />
@@ -33,6 +36,5 @@ function Login() {
         </div>
     );
 }
-
 
 ReactDOM.render(<Login />, document.getElementById('login'));

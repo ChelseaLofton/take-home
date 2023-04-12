@@ -1,30 +1,35 @@
+// Description: This file contains the SearchReservations component, which allows users to search for available reservation times on a given date
+
+// The TimeSelect component creates a dropdown menu for selecting a time slot.
 
 
-    function TimeSelect({ label, value, onChange }) {
-        const timeOptions = createTimeOptions();
+function TimeSelect({ label, value, onChange }) {
+    const timeOptions = createTimeOptions();
 
-        return (
-            <label>
-                {label}
-                <select value={value} onChange={onChange} required>
-                    <option value="">Select time</option>
-                    {timeOptions.map((time) => (
-                        <option key={time} value={time}>
-                            {time}
-                        </option>
-                    ))}
-                </select>
-            </label>
-        );
-    }
+    return (
+        <label>
+            {label}
+            <select value={value} onChange={onChange} required>
+                <option value="">Select time</option>
+                {timeOptions.map((time) => (
+                    <option key={time} value={time}>
+                        {time}
+                    </option>
+                ))}
+            </select>
+        </label>
+    );
+}
 
-    function createTimeOptions() {
-        return Array.from({ length: 48 }, (_, i) => {
-            const hours = Math.floor(i / 2);
-            const minutes = i % 2 === 0 ? '00' : '30';
-            return `${hours.toString().padStart(2, '0')}:${minutes}`;
-        });
-    }
+
+// half-hour increments starting from 00:00 to 23:30
+function createTimeOptions() {
+    return Array.from({ length: 48 }, (_, i) => {
+        const hours = Math.floor(i / 2);
+        const minutes = i % 2 === 0 ? '00' : '30';
+        return `${hours.toString().padStart(2, '0')}:${minutes}`;
+    });
+}
 
 function SearchReservations() {
     const [date, setDate] = React.useState('');
@@ -33,17 +38,18 @@ function SearchReservations() {
     const [availableTimes, setAvailableTimes] = React.useState([]);
     const [hasReservation, setHasReservation] = React.useState(false);
 
+    // makes a request to the server to get a list of reservations for the selected date
     const handleSubmit = async (event) => {
         event.preventDefault();
 
-        // Query the database for all reservations on the given date
+
         const response = await fetch(`/search/reservations?date=${date}`);
         const data = await response.json();
 
         const reservations = data.reservations;
         const userId = data.user_id;
 
-        // Check if the user already has a reservation on the selected date
+        // checks if the user already has a reservation on the selected date
         const userReservation = reservations.find((reservation) => reservation.user_id === userId);
         if (userReservation) {
             alert(`You already have a reservation on ${date} at ${userReservation.start_time}.`);
@@ -53,7 +59,7 @@ function SearchReservations() {
             setHasReservation(false);
         }
 
-        // Create a list of available time slots based on the reservations and selected time range
+        //  calculates the list of available time slots based on the selected start and end times
         const timeOptions = createTimeOptions().filter((time) => time >= startTime && time <= endTime);
         const unavailableTimes = reservations.map((reservation) => reservation.start_time);
         const availableTimes = timeOptions.filter((time) => !unavailableTimes.includes(time));
@@ -61,7 +67,7 @@ function SearchReservations() {
     };
 
     const handleBookReservation = async (time) => {
-        // Make a POST request to the server to create a reservation with the selected time
+        // POST request to the server to create a reservation with the selected time
         const response = await fetch('/api/reservations', {
             method: 'POST',
             headers: {

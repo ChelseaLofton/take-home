@@ -70,6 +70,7 @@ def get_reservations():
 
 @app.route('/api/reservations', methods=['POST'])
 def create_reservation():
+    """Handle the creation of a new reservation."""
     data = request.get_json()
     date = data['date']
     time = data['time']
@@ -78,8 +79,10 @@ def create_reservation():
     if not user_id:
         return jsonify({'message': 'User not logged in'}), 401
 
-    start_datetime = datetime.strptime(f"{date} {time.split('-')[0]}", "%Y-%m-%d %H:%M")
-    end_datetime = datetime.strptime(f"{date} {time.split('-')[1]}", "%Y-%m-%d %H:%M")
+    start_datetime = datetime.strptime(
+        f"{date} {time.split('-')[0]}", "%Y-%m-%d %H:%M")
+    end_datetime = datetime.strptime(
+        f"{date} {time.split('-')[1]}", "%Y-%m-%d %H:%M")
 
     # Check if the user already has a reservation during the chosen time
     existing_reservation = Reservation.query.filter(
@@ -91,15 +94,16 @@ def create_reservation():
     if existing_reservation:
         return jsonify({'message': 'You already have a reservation during the chosen time.'}), 400
 
-    # Create a new reservation and save it to the database
-    new_reservation = Reservation(user_id=user_id, start_time=start_datetime, end_time=end_datetime)
+    # Create a new reservation object
+    new_reservation = Reservation(
+        user_id=user_id, start_time=start_datetime, end_time=end_datetime)
+
+    # Add the new reservation to the session and commit the changes to the database
     db.session.add(new_reservation)
     db.session.commit()
 
+    # Return a success message
     return jsonify({'message': 'Reservation created successfully'}), 201
-
-
-
 
 
 if __name__ == "__main__":
