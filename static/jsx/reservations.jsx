@@ -1,3 +1,31 @@
+
+function TimeSelect({ label, value, onChange }) {
+    const timeOptions = createTimeOptions();
+
+    return (
+        <label>
+            {label}
+            <select value={value} onChange={onChange} required>
+                <option value="">Select time</option>
+                {timeOptions.map((time) => (
+                    <option key={time} value={time}>
+                        {time}
+                    </option>
+                ))}
+            </select>
+        </label>
+    );
+}
+
+function createTimeOptions() {
+    return Array.from({ length: 48 }, (_, i) => {
+        const hours = Math.floor(i / 2);
+        const minutes = i % 2 === 0 ? '00' : '30';
+        return `${hours.toString().padStart(2, '0')}:${minutes}`;
+    });
+}
+
+
 function SearchReservations() {
     const [date, setDate] = React.useState('');
     const [startTime, setStartTime] = React.useState('');
@@ -53,38 +81,23 @@ function SearchReservations() {
             <form onSubmit={handleSubmit}>
                 <label>
                     Date:
-                    <input type="date" value={date} onChange={(e) => setDate(e.target.value)} required />
-                </label>
-                <label>
-                    Start Time:
-                    <select
-                        value={startTime}
-                        onChange={(e) => setStartTime(e.target.value)}
+                    <input
+                        type="date"
+                        value={date}
+                        onChange={(e) => setDate(e.target.value)}
                         required
-                    >
-                        <option value="">Select start time</option>
-                        {timeOptions.map((time) => (
-                            <option key={time} value={time}>
-                                {time}
-                            </option>
-                        ))}
-                    </select>
+                    />
                 </label>
-                <label>
-                    End Time:
-                    <select
-                        value={endTime}
-                        onChange={(e) => setEndTime(e.target.value)}
-                        required
-                    >
-                        <option value="">Select end time</option>
-                        {timeOptions.map((time) => (
-                            <option key={time} value={time}>
-                                {time}
-                            </option>
-                        ))}
-                    </select>
-                </label>
+                <TimeSelect
+                    label="Start Time:"
+                    value={startTime}
+                    onChange={(e) => setStartTime(e.target.value)}
+                />
+                <TimeSelect
+                    label="End Time:"
+                    value={endTime}
+                    onChange={(e) => setEndTime(e.target.value)}
+                />
                 <button type="submit">Search</button>
             </form>
         </div>
