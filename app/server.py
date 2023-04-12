@@ -27,7 +27,9 @@ def login():
         session['user_id'] = user.id
         return redirect(url_for('reservations'))
     else:
+        flash('Sorry, we do not have a record of that username. Please try again or sign up.')
         return redirect(url_for('login_page'))
+
 
 
 @app.route('/reservations')
