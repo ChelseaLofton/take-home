@@ -33,3 +33,6 @@ function Login() {
         </div>
     );
 }
+
+
+ReactDOM.render(<Login />, document.getElementById('login'));
