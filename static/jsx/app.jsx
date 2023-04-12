@@ -1,8 +1,8 @@
+
 function App() {
     return (
         <div>
             <Login />
-            <SearchReservations />
         </div>
     );
 }
