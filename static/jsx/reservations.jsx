@@ -1,39 +1,37 @@
 
-function TimeSelect({ label, value, onChange }) {
-    const timeOptions = createTimeOptions();
 
-    return (
-        <label>
-            {label}
-            <select value={value} onChange={onChange} required>
-                <option value="">Select time</option>
-                {timeOptions.map((time) => (
-                    <option key={time} value={time}>
-                        {time}
-                    </option>
-                ))}
-            </select>
-        </label>
-    );
-}
+    function TimeSelect({ label, value, onChange }) {
+        const timeOptions = createTimeOptions();
 
-function createTimeOptions() {
-    return Array.from({ length: 48 }, (_, i) => {
-        const hours = Math.floor(i / 2);
-        const minutes = i % 2 === 0 ? '00' : '30';
-        return `${hours.toString().padStart(2, '0')}:${minutes}`;
-    });
-}
+        return (
+            <label>
+                {label}
+                <select value={value} onChange={onChange} required>
+                    <option value="">Select time</option>
+                    {timeOptions.map((time) => (
+                        <option key={time} value={time}>
+                            {time}
+                        </option>
+                    ))}
+                </select>
+            </label>
+        );
+    }
 
+    function createTimeOptions() {
+        return Array.from({ length: 48 }, (_, i) => {
+            const hours = Math.floor(i / 2);
+            const minutes = i % 2 === 0 ? '00' : '30';
+            return `${hours.toString().padStart(2, '0')}:${minutes}`;
+        });
+    }
 
 function SearchReservations() {
     const [date, setDate] = React.useState('');
     const [startTime, setStartTime] = React.useState('');
     const [endTime, setEndTime] = React.useState('');
     const [availableTimes, setAvailableTimes] = React.useState([]);
-
-    const [showModal, setShowModal] = React.useState(false);
-    const [selectedTime, setSelectedTime] = React.useState('');
+    const [hasReservation, setHasReservation] = React.useState(false);
 
     const handleSubmit = async (event) => {
         event.preventDefault();
@@ -42,46 +40,26 @@ function SearchReservations() {
         const response = await fetch(`/search/reservations?date=${date}`);
         const data = await response.json();
 
-        if (data.error) {
-            alert(data.error);
+        const reservations = data.reservations;
+
+        // Check if the user already has a reservation on the selected date
+        const userReservation = reservations.find((reservation) => reservation.user_id === YOUR_USER_ID);
+        if (userReservation) {
+            alert(`You already have a reservation on ${date} at ${userReservation.start_time}.`);
+            setHasReservation(true);
+            return;
         } else {
-            const reservations = data.reservations;
-
-            // Create a list of available time slots based on the reservations
-            const unavailableTimes = reservations.map((reservation) => ({
-                start: reservation.start_time,
-                end: reservation.end_time,
-            }));
-            const availableTimes = [];
-            for (let i = 0; i < 48; i++) {
-                const startTime = `${Math.floor(i / 2)
-                    .toString()
-                    .padStart(2, '0')}:${i % 2 === 0 ? '00' : '30'}`;
-                const endTime = `${Math.floor((i + 1) / 2)
-                    .toString()
-                    .padStart(2, '0')}:${(i + 1) % 2 === 0 ? '00' : '30'}`;
-                if (
-                    !unavailableTimes.some(
-                        (reservation) =>
-                            reservation.start === startTime && reservation.end === endTime
-                    )
-                ) {
-                    availableTimes.push(`${startTime}-${endTime}`);
-                }
-            }
-            setAvailableTimes(availableTimes);
-
-            // TODO: Display the available time slots to the user
+            setHasReservation(false);
         }
-    };
-    const handleSelectTime = (event) => {
-        setSelectedTime(event.target.value);
+
+        // Create a list of available time slots based on the reservations and selected time range
+        const timeOptions = createTimeOptions().filter((time) => time >= startTime && time <= endTime);
+        const unavailableTimes = reservations.map((reservation) => reservation.start_time);
+        const availableTimes = timeOptions.filter((time) => !unavailableTimes.includes(time));
+        setAvailableTimes(availableTimes);
     };
 
-    const handleBookReservation = async () => {
-        // Close the modal
-        setShowModal(false);
-
+    const handleBookReservation = async (time) => {
         // Make a POST request to the server to create a reservation with the selected time
         const response = await fetch('/api/reservations', {
             method: 'POST',
@@ -90,7 +68,7 @@ function SearchReservations() {
             },
             body: JSON.stringify({
                 date,
-                time: selectedTime,
+                time,
             }),
         });
 
@@ -102,41 +80,29 @@ function SearchReservations() {
         }
     };
 
-
-
-    const timeOptions = availableTimes.length
-        ? availableTimes
-        : Array.from({ length: 48 }, (_, i) => {
-            const hours = Math.floor(i / 2);
-            const minutes = i % 2 === 0 ? '00' : '30';
-            return `${hours.toString().padStart(2, '0')}:${minutes}`;
-        });
-
-        return (
-            <div>
-                <form onSubmit={handleSubmit}>
-                    <label>
-                        Date:
-                        <input
-                            type="date"
-                            value={date}
-                            onChange={(event) => setDate(event.target.value)}
-                            required
-                        />
-                    </label>
-                    <TimeSelect
-                        label="Start time:"
-                        value={startTime}
-                        onChange={(event) => setStartTime(event.target.value)}
+    return (
+        <div>
+            <form onSubmit={handleSubmit}>
+                <label>
+                    Date:
+                    <input
+                        type="date"
+                        value={date}
+                        onChange={(event) => setDate(event.target.value)}
+                        required
                     />
-                    <TimeSelect
-                        label="End time:"
-                        value={endTime}
-                        onChange={(event) => setEndTime(event.target.value)}
-                    />
-                    <button type="submit">Search</button>
-                </form>
-                {/* ... [modal] ... */}
-            </div>
-        );
-    }
+                </label>
+                <TimeSelect label="Start Time:" value={startTime} onChange={(event) => setStartTime(event.target.value)} />
+                <TimeSelect label="End Time:" value={endTime} onChange={(event) => setEndTime(event.target.value)} />
+                <button type="submit">Search</button>
+            </form>
+            {!hasReservation && availableTimes.map((time) => (
+                <div key={time}>
+                    <span>{time}</span>
+                    <button onClick={() => handleBookReservation(time)}>Book</button>
+                </div>
+            ))}
+        </div>
+    );
+}
+

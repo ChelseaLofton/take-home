@@ -43,6 +43,7 @@ def reservations():
 @app.route('/search/reservations')
 def get_reservations():
     date = request.args.get('date')
+    user_id = session.get('user_id')
 
     # Get the datetime objects for the selected date
     start_datetime = datetime.strptime(f"{date} 00:00", "%Y-%m-%d %H:%M")
@@ -64,7 +65,7 @@ def get_reservations():
         } for reservation in unavailable_reservations
     ]
 
-    return jsonify({'reservations': unavailable_reservations_json})
+    return jsonify({'reservations': unavailable_reservations_json, 'user_id': user_id})
 
 
 @app.route('/api/reservations', methods=['POST'])
@@ -98,50 +99,6 @@ def create_reservation():
     return jsonify({'message': 'Reservation created successfully'}), 201
 
 
-# @app.route('/reservation/search', methods=['POST'])
-# def search_reservations():
-#     data = request.get_json()
-#     date = data['date']
-#     start_time = data['startTime']
-#     end_time = data['endTime']
-
-#     # Get the datetime objects for the selected date and time range
-#     start_datetime = datetime.strptime(f"{date} {start_time}", "%Y-%m-%d %H:%M")
-#     end_datetime = datetime.strptime(f"{date} {end_time}", "%Y-%m-%d %H:%M")
-
-#     # Get the current user's ID
-#     user_id = session.get('user_id')
-
-#     # Check if the user already has a reservation on the chosen date
-#     existing_reservation = Reservation.query.filter(
-#         Reservation.user_id == user_id,
-#         Reservation.start_time >= start_datetime,
-#         Reservation.end_time <= end_datetime
-#     ).first()
-
-#     if existing_reservation:
-#         return jsonify({'error': 'You already have a reservation on the chosen date.'}), 400
-
-#     # Find all available reservations within the specified time range
-#     available_reservations = Reservation.query.filter(
-#         Reservation.start_time >= start_datetime,
-#         Reservation.end_time <= end_datetime
-#     ).all()
-
-#     if not available_reservations:
-#         return jsonify({'error': 'No reservations available.'}), 404
-
-#     # Convert the reservations to a JSON serializable format
-#     available_reservations_json = [
-#         {
-#             'id': reservation.id,
-#             'start_time': reservation.start_time.isoformat(),
-#             'end_time': reservation.end_time.isoformat(),
-#             'user_id': reservation.user_id,
-#         } for reservation in available_reservations
-#     ]
-
-#     return jsonify(available_reservations_json)
 
 
 
