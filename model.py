@@ -1,5 +1,6 @@
 from flask_sqlalchemy import SQLAlchemy
 from datetime import datetime
+import os
 
 db = SQLAlchemy()
 
@@ -24,8 +25,8 @@ class Reservation(db.Model):
         return f'<Reservation {self.start_time} - {self.end_time}>'
 
 
-def connect_to_db(flask_app, db_uri="postgresql:///take_home", echo=True):
-    flask_app.config['SQLALCHEMY_DATABASE_URI'] = db_uri
+def connect_to_db(flask_app,):
+    flask_app.config['SQLALCHEMY_DATABASE_URI'] = os.environ['POSTGRES_URL']
     flask_app.config['SQLALCHEMY_ECHO'] = echo
     flask_app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 

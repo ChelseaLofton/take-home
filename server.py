@@ -103,7 +103,7 @@ def create_reservation():
     db.session.add(new_reservation)
     db.session.commit()
 
-    # Return a success message
+
     return jsonify({'message': 'Reservation created successfully'}), 201
 
 
