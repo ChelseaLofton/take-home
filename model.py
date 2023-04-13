@@ -25,7 +25,7 @@ class Reservation(db.Model):
         return f'<Reservation {self.start_time} - {self.end_time}>'
 
 
-def connect_to_db(flask_app,):
+def connect_to_db(flask_app):
     flask_app.config['SQLALCHEMY_DATABASE_URI'] = os.environ['POSTGRES_URL']
     flask_app.config['SQLALCHEMY_ECHO'] = True
     flask_app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
