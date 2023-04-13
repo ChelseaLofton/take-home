@@ -27,7 +27,7 @@ class Reservation(db.Model):
 
 def connect_to_db(flask_app,):
     flask_app.config['SQLALCHEMY_DATABASE_URI'] = os.environ['POSTGRES_URL']
-    flask_app.config['SQLALCHEMY_ECHO'] = echo
+    flask_app.config['SQLALCHEMY_ECHO'] = True
     flask_app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
     db.app = flask_app
