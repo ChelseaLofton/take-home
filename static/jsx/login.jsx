@@ -21,15 +21,25 @@ function Login() {
 
 
     return (
-        <div>
-            <h1>Login</h1>
-            <form action="/api/login" method="POST">
-                <label>
-                    Username:
-                    <input type="text" name="username" value={username} onChange={(e) => setUsername(e.target.value)} />
-                </label>
-                <button type="submit">Log in</button>
-            </form>
+        <div className="d-flex justify-content-center align-items-center h-100">
+            <div className="bg-white p-5 rounded">
+                <h1 className="text-center mb-4">Login</h1>
+                <form action="/api/login" method="POST">
+                    <div className="form-group">
+                        <label>Username:</label>
+                        <input
+                            type="text"
+                            name="username"
+                            className="form-control"
+                            value={username}
+                            onChange={(e) => setUsername(e.target.value)}
+                        />
+                    </div>
+                    <button type="submit" className="btn btn-primary">
+                        Log in
+                    </button>
+                </form>
+            </div>
         </div>
     );
 }
