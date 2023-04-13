@@ -1,9 +1,7 @@
 from flask import Flask, render_template, request, redirect, session, url_for, jsonify, flash
 from jinja2 import StrictUndefined
-from app.model import db, User, Reservation, connect_to_db 
 from flask_sqlalchemy import SQLAlchemy
-
-
+from model import db, User, Reservation, connect_to_db
 from datetime import datetime
 import os
 
