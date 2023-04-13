@@ -1,7 +1,9 @@
 from flask import Flask, render_template, request, redirect, session, url_for, jsonify, flash
 from jinja2 import StrictUndefined
+from app.model import db, User, Reservation, connect_to_db 
 from flask_sqlalchemy import SQLAlchemy
-from model import db, User, Reservation, connect_to_db
+
+
 from datetime import datetime
 import os
 
@@ -47,7 +49,7 @@ def get_reservations():
     date = request.args.get('date')
     user_id = session.get('user_id')
 
-    # Get the datetime objects for the selected date
+    # Get the datetime objects for the selected date 
     start_datetime = datetime.strptime(f"{date} 00:00", "%Y-%m-%d %H:%M")
     end_datetime = datetime.strptime(f"{date} 23:59", "%Y-%m-%d %H:%M")
 
