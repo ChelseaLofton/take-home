@@ -1,0 +1,64 @@
+.reservation-container {
+    max-width: 60%;
+    float: right;
+    margin: 40px;
+    font-family: Arial, sans-serif;
+    font-size: 18px;
+    color: #333;
+    background-color: #fff;
+    opacity: 0.9;
+}
+
+.reservation-table {
+    width: 100%;
+    border-collapse: collapse;
+
+    background-color: #fff;
+    opacity: 0.9;
+}
+
+
+.reservation-table th,
+.reservation-table td {
+    border: 1px solid #ddd;
+    padding: 12px;
+    text-align: left;
+    font-family: Arial, sans-serif;
+    font-size: 16px;
+    color: #020202;
+}
+
+.reservation-table th {
+    background-color: rgb(56, 141, 56);
+    font-weight: bold;
+}
+
+.reservation-heading {
+    margin-right: 40px;
+    margin-top: 40px;
+}
+
+body {
+    background-image: url('/static/images/canteloup.jpeg');
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center center;
+    width: 100%;
+    height: 100vh;
+}
+
+
+h1 {
+    text-align: center;
+    font-size: 48px; /* Adjust the font size */
+    color: rgb(56, 141, 56); /* Set the text color */
+    text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black; /* Add a black lining */
+}
+
+
+.container {
+    margin-left: 50px;
+    margin-top: 60px;
+    background-color: #f9f7f7;
+    max-width: 30%;
+}
