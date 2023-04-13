@@ -3,14 +3,26 @@
 {% block content %}
     <h1>Your Reservations</h1>
     {% if reservations %}
-        <ul>
+    <table class="reservation-table">
+        <thead>
+            <tr>
+                <th>Start Time</th>
+                <th>End Time</th>
+            </tr>
+        </thead>
+        <tbody id="reservation-list">
         {% for reservation in reservations %}
-            <li>{{ reservation.start_time.strftime('%Y-%m-%d %H:%M') }} - {{ reservation.end_time.strftime('%Y-%m-%d %H:%M') }}</li>
+            <tr>
+                <td>{{ reservation.start_time.strftime('%Y-%m-%d %H:%M') }}</td>
+                <td>{{ reservation.end_time.strftime('%Y-%m-%d %H:%M') }}</td>
+            </tr>
         {% endfor %}
-        </ul>
-    {% else %}
-        <p>You have no reservations.</p>
-    {% endif %}
+        </tbody>
+    </table>
+{% else %}
+    <p>You have no reservations.</p>
+{% endif %}
+
     <div id="root">
     </div>
 
