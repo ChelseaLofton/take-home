@@ -67,6 +67,10 @@ function SearchReservations() {
     };
 
     const handleBookReservation = async (time) => {
+        // Get the next time slot
+        const timeIndex = createTimeOptions().indexOf(time);
+        const endTime = createTimeOptions()[timeIndex + 1];
+    
         // POST request to the server to create a reservation with the selected time
         const response = await fetch('/api/reservations', {
             method: 'POST',
@@ -75,7 +79,7 @@ function SearchReservations() {
             },
             body: JSON.stringify({
                 date,
-                time,
+                time: `${time}-${endTime}`,
             }),
         });
 
