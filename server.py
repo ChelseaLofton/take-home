@@ -5,10 +5,9 @@ from model import db, User, Reservation, connect_to_db
 from datetime import datetime
 import os
 
-app = Flask(
-    __name__, template_folder='/Users/chelsealofton/src/take-home/templates')
+app = Flask(__name__, template_folder='templates')
+app.static_folder = 'static'
 
-app.static_folder = '/Users/chelsealofton/src/take-home/static'
 app.secret_key = os.environ.get('SECRET_KEY')
 app.jinja_env.undefined = StrictUndefined
 

@@ -1,5 +1,3 @@
-from server import app
-
 from flask_sqlalchemy import SQLAlchemy
 from datetime import datetime
 
@@ -42,6 +40,6 @@ def connect_to_db(flask_app, db_uri="postgresql:///take_home", echo=True):
 
 
 if __name__ == '__main__':
-    from server import app
+    from .server import app
     app.run(host="0.0.0.0", port=4000, debug=True)
 
