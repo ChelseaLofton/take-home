@@ -1,27 +1,31 @@
 {% extends "base.html" %}
 
 {% block content %}
-    <h1>Your Reservations</h1>
-    {% if reservations %}
-    <table class="reservation-table">
-        <thead>
-            <tr>
-                <th>Start Time</th>
-                <th>End Time</th>
-            </tr>
-        </thead>
-        <tbody id="reservation-list">
-        {% for reservation in reservations %}
-            <tr>
-                <td>{{ reservation.start_time.strftime('%Y-%m-%d %H:%M') }}</td>
-                <td>{{ reservation.end_time.strftime('%Y-%m-%d %H:%M') }}</td>
-            </tr>
-        {% endfor %}
-        </tbody>
-    </table>
-{% else %}
-    <p>You have no reservations.</p>
-{% endif %}
+    <div class="reservation-heading">
+        <h1>Your Reservations</h1>
+    </div>
+    <div class="reservation-container">
+        {% if reservations %}
+        <table class="reservation-table">
+            <thead>
+                <tr>
+                    <th>Start Time</th>
+                    <th>End Time</th>
+                </tr>
+            </thead>
+            <tbody id="reservation-list">
+            {% for reservation in reservations %}
+                <tr>
+                    <td>{{ reservation.start_time.strftime('%Y-%m-%d %H:%M') }}</td>
+                    <td>{{ reservation.end_time.strftime('%Y-%m-%d %H:%M') }}</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+        {% else %}
+        <p>You have no reservations.</p>
+        {% endif %}
+    </div>
 
     <div id="root">
     </div>
@@ -35,7 +39,4 @@
     <!-- My Apps -->
     <script src="/static/jsx/reservations.jsx" type="text/jsx"></script>
     <script src="/static/jsx/app.jsx" type="text/jsx"></script>
-
-
-
 {% endblock %}

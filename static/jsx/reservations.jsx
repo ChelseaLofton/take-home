@@ -70,7 +70,7 @@ function SearchReservations() {
         // Get the next time slot
         const timeIndex = createTimeOptions().indexOf(time);
         const endTime = createTimeOptions()[timeIndex + 1];
-    
+
         // POST request to the server to create a reservation with the selected time
         const response = await fetch('/api/reservations', {
             method: 'POST',
@@ -92,28 +92,55 @@ function SearchReservations() {
     };
 
     return (
-        <div>
-            <form onSubmit={handleSubmit}>
-                <label>
-                    Date:
-                    <input
-                        type="date"
-                        value={date}
-                        onChange={(event) => setDate(event.target.value)}
-                        required
-                    />
-                </label>
-                <TimeSelect label="Start Time:" value={startTime} onChange={(event) => setStartTime(event.target.value)} />
-                <TimeSelect label="End Time:" value={endTime} onChange={(event) => setEndTime(event.target.value)} />
-                <button type="submit">Search</button>
-            </form>
-            {!hasReservation && availableTimes.map((time) => (
-                <div key={time}>
-                    <span>{time}</span>
-                    <button onClick={() => handleBookReservation(time)}>Book</button>
+        <div className="container">
+            <div className="row">
+                <div className="col-md-5">
+                    <div className="booking-container">
+                        <h1>Book your Reservations!</h1>
+                        <form onSubmit={handleSubmit}>
+                            <div>
+                                <label>
+                                    Date:
+                                    <input
+                                        type="date"
+                                        value={date}
+                                        onChange={(event) => setDate(event.target.value)}
+                                        required
+                                    />
+                                </label>
+                            </div>
+                            <div>
+                                <div>
+                                    <TimeSelect
+                                        label="Start Time:"
+                                        value={startTime}
+                                        onChange={(event) => setStartTime(event.target.value)}
+                                    />
+                                </div>
+                                <div>
+                                    <TimeSelect
+                                        label="End Time:"
+                                        value={endTime}
+                                        onChange={(event) => setEndTime(event.target.value)}
+                                    />
+                                </div>
+                            </div>
+                            <button type="submit">Search</button>
+                        </form>
+                    </div>
                 </div>
-            ))}
+                <div className="col-md-5 float-md-right">
+                    {!hasReservation &&
+                        availableTimes.map((time) => (
+                            <div key={time}>
+                                <span>{time}</span>
+                                <button onClick={() => handleBookReservation(time)}>Book</button>
+                            </div>
+                        ))}
+                </div>
+            </div>
         </div>
+
     );
 }
 
