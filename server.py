@@ -11,6 +11,9 @@ app.static_folder = 'static'
 app.secret_key = os.environ.get('SECRET_KEY')
 app.jinja_env.undefined = StrictUndefined
 
+@app.route('/')
+def root():
+    return redirect('/login_page')
 
 @app.route('/login_page')
 def login_page():
